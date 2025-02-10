@@ -20,7 +20,9 @@ jobs:
           distribution: 'temurin'
 
       - name: Build Spring Boot Project
-        run: ./gradlew clean build
+        run: |
+          ./gradlew clean build
+          ls -l build/libs
 
       - name: pododo-server deploy
         uses: appleboy/ssh-action@v0.1.5
@@ -30,6 +32,7 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           port: 22
           script: |
-            cp build/libs/pododo.jar /home/${{ secrets.SERVER_USER }}/pododo.jar
+            ls -l build/libs
+            cp build/libs/pododo-server.jar /home/${{ secrets.SERVER_USER }}/pododo-server.jar
 
             /home/${{ secrets.SERVER_USER }}/pododo/pododo-server.sh
