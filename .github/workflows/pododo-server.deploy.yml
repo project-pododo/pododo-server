@@ -22,6 +22,10 @@ jobs:
       - name: Build Spring Boot Project
         run: ./gradlew clean build
 
+      - name: Upload JAR to GCP
+        run: |
+          scp -i ${{ secrets.GCP_SSH_KEY }} build/libs/pododo-server.jar ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/home/${{ secrets.SERVER_USER }}/pododo-server.jar
+
       - name: pododo-server deploy
         uses: appleboy/ssh-action@v0.1.5
         with:
@@ -29,7 +33,4 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           port: 22
-          script: |
-            cp build/libs/pododo.jar /home/${{ secrets.SERVER_USER }}/pododo.jar
-
-            /home/${{ secrets.SERVER_USER }}/pododo/pododo-server.sh
+          script: /home/${{ secrets.SERVER_USER }}/pododo/pododo-server.sh
