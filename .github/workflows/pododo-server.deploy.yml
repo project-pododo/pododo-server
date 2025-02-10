@@ -30,6 +30,6 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           port: 22
           script: |
-            cp build/libs/pododo.jar /home/${{ secrets.SERVER_USER }}/pododo.jar
+            cp build/libs/pododo-server.jar /home/${{ secrets.SERVER_USER }}/pododo-server.jar
 
             /home/${{ secrets.SERVER_USER }}/pododo/pododo-server.sh
