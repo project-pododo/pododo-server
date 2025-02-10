@@ -39,6 +39,13 @@ dependencies {
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
+// JAR 파일 명칭 설정
+bootJar {
+	archiveBaseName = 'pododo'  // JAR 파일의 기본 이름을 pododo로 설정
+	archiveVersion = ''        // 버전 정보를 제거하여 pododo.jar로 설정
+	archiveExtension = 'jar'   // 확장자는 'jar'
+}
+
 tasks.named('test') {
 	useJUnitPlatform()
 }
