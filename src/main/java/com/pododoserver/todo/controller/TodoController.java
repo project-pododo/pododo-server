@@ -27,10 +27,12 @@ public class TodoController extends BaseController {
     public ResponseEntity<?> getItemListBySeller(HttpSession session,
                                                  WebRequest webReq) {
         log.info("test");
-        return getResOK(webReq, BaseMsg.SUCCESS_OK,
-                TestDTO.builder()
+        return getResOK(webReq, BaseMsg.SUCCESS_OK, TestDTO.builder()
                 .id(0L)
-                .name("test").build());
+                .name("test")
+                .age(20)
+                .comment("테스트입니다")
+                .build());
     }
 
 }
