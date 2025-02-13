@@ -24,7 +24,7 @@ jobs:
 
       - name: Upload JAR to GCP
         run: |
-          scp -i ${{ secrets.GCP_SSH_KEY }} build/libs/pododo-server.jar ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/home/${{ secrets.SERVER_USER }}/pododo-server.jar
+          scp -i ${{ secrets.GCP_SSH_KEY }} build/libs/pododo-server.jar ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/home/${{ secrets.SERVER_USER }}/${{ secrets.SERVER_USER }}/pododo-server.jar
 
       - name: pododo-server deploy
         uses: appleboy/ssh-action@v0.1.5
