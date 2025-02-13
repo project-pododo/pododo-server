@@ -22,9 +22,15 @@ jobs:
       - name: Build Spring Boot Project
         run: ./gradlew clean build
 
+      - name: Setup SSH Key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SERVER_SSH_KEY }}" > ~/.ssh/gcp_ssh_key
+          chmod 600 ~/.ssh/gcp_ssh_key
+
       - name: Upload JAR to GCP
         run: |
-          scp -i ${{ secrets.GCP_SSH_KEY }} build/libs/pododo-server.jar ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/home/${{ secrets.SERVER_USER }}/pododo-server.jar
+          scp -o StrictHostKeyChecking=no -i ~/.ssh/gcp_ssh_key build/libs/pododo-server.jar ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/home/${{ secrets.SERVER_USER }}/pododo-server.jar
 
       - name: pododo-server deploy
         uses: appleboy/ssh-action@v0.1.5
