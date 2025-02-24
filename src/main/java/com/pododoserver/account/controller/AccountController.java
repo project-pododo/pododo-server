@@ -2,6 +2,7 @@ package com.pododoserver.account.controller;
 
 import com.pododoserver.account.service.AccountService;
 import com.pododoserver.common.BaseController;
+import com.pododoserver.common.constant.BaseMessage;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +25,6 @@ public class AccountController extends BaseController {
                                         WebRequest webReq) {
 
         accountService.getAccountInfoById();
-        return getResOK(webReq, null);
+        return getResOK(webReq, BaseMessage.SUCCESS_OK);
     }
 }
