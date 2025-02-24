@@ -19,24 +19,30 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
+      - name: Set environment variables
+        run: |
+          echo "DB_HOST=${{ secrets.DB_HOST }}" >> $GITHUB_ENV
+          echo "DB_USER=${{ secrets.DB_USER }}" >> $GITHUB_ENV
+          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> $GITHUB_ENV
+
       - name: Build Spring Boot Project
-        run: ./gradlew clean build
+        run: ./gradlew clean build -Dspring.profiles.active=prod -Dspring.datasource.url=${{ secrets.DB_HOST }} -Dspring.datasource.username=${{ secrets.DB_USER }} -Dspring.datasource.password=${{ secrets.DB_PASSWORD }}
 
-      - name: Setup SSH Key
+      - name: Docker build
         run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SERVER_SSH_KEY }}" > ~/.ssh/gcp_ssh_key
-          chmod 600 ~/.ssh/gcp_ssh_key
+          docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.SERVER_USER }} .
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.SERVER_USER }}:latest
 
-      - name: Upload JAR to GCP
-        run: |
-          scp -o StrictHostKeyChecking=no -i ~/.ssh/gcp_ssh_key build/libs/pododo-server.jar ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/home/${{ secrets.SERVER_USER }}/pododo-server.jar
-
-      - name: pododo-server deploy
-        uses: appleboy/ssh-action@v0.1.5
+      - name: Deploy
+        uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
-          port: 22
-          script: /home/${{ secrets.SERVER_USER }}/pododo/pododo-server.sh
+          script: |
+            sudo docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
+            sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.SERVER_USER }}:latest
+            sudo docker stop pododo-server || true
+            sudo docker rm pododo-server || true
+            sudo docker run -d -p 8081:8081 --name pododo-server ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.SERVER_USER }}:latest
