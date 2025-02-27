@@ -94,7 +94,7 @@ public class TodoController extends BaseController {
         return getResOK(webRequest, BaseMessage.SUCCESS_DELETE);
     }
 
-    @PatchMapping
+    @PatchMapping("/use")
     public ResponseEntity<?> restoreUseYn(WebRequest webRequest,
                                          HttpSession session,
                                          @RequestBody TodoModifyStatusRequest request) {
