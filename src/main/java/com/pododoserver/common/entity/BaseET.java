@@ -4,15 +4,15 @@ import java.time.LocalDateTime;
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
-import org.hibernate.annotations.DynamicInsert;
+import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@DynamicInsert
 @NoArgsConstructor
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
@@ -23,8 +23,9 @@ public class BaseET {
 
     @CreatedDate
     @Column(name = "reg_date", nullable = false, updatable = false)
-    private LocalDateTime regDate = LocalDateTime.now();
+    private LocalDateTime regDate;
 
+    @CreatedBy
     @Column(name = "reg_id", nullable = false)
     private Long regId;
 
@@ -32,6 +33,7 @@ public class BaseET {
     @Column(name = "upd_date", nullable = false)
     private LocalDateTime updDate;
 
+    @LastModifiedBy
     @Column(name = "mod_id", nullable = false)
     private Long modId;
 
