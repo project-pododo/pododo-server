@@ -1,9 +1,9 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ENC(a24511OJKzMFth9xEpUkL+fWNe9YBz4vSVfMdq7dXLDgdmObgsWqye5FiIS9wZ0jdIgK9Vy80Opk01KuswZ8DlrXLsgbD0b5)
-    username: ENC(49RyIyDBsjwtsVUdu7jBew==)
-    password: ENC(ZQrEq+x62sHxv5Tju52Ty7cECr4mZea3)
+    url: ENC(mfwpY6Fe9k5efKMa6Hxg9lSjkbyCrEHmuAaQhR3hB9dXgYQNlkk6ycZQQu6IFykYLJogn36Uw6907DZqntPEDsE+AYBdaEww2RjNqbup1RaCXsGH7+EI0eZCbEGsy83F)
+    username: ENC(gq/ybhP706qRlh2nBaOdfsISNm4ckXLsjkiTP+ZWy3DjtBhpfy00R5i5SkfI5Pz7)
+    password: ENC(CZvoqUNMk4OS2nOV4G8c8cJfI/y0kd0ezlVLL4BYSzw4wONOnPlskSF/nGKWjAG0)
     data-source-properties:
       rewriteBatchedStatements: true
     hikari:

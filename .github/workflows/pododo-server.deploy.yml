@@ -3,7 +3,7 @@ name: pododo-server deploy
 on:
   push:
     branches:
-      - main
+      - dev
 
 jobs:
   deploy:
@@ -19,14 +19,8 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
-      - name: Set environment variables
-        run: |
-          echo "DB_HOST=${{ secrets.DB_HOST }}" >> $GITHUB_ENV
-          echo "DB_USER=${{ secrets.DB_USER }}" >> $GITHUB_ENV
-          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> $GITHUB_ENV
-
       - name: Build Spring Boot Project
-        run: ./gradlew clean build -Dspring.profiles.active=prod -Dspring.datasource.url=${{ secrets.DB_HOST }} -Dspring.datasource.username=${{ secrets.DB_USER }} -Dspring.datasource.password=${{ secrets.DB_PASSWORD }}
+        run: ./gradlew clean build -Dspring.profiles.active=prod -Djasypt.encryptor.password=${{ secrets.JASYPT_ENCRYPTOR_PASSWORD }}
 
       - name: Docker build
         run: |
