@@ -1,5 +1,7 @@
 package com.pododoserver.todo.service;
 
+import com.pododoserver.todo.constant.TodoStatus;
+import com.pododoserver.todo.constant.UseYn;
 import com.pododoserver.todo.entity.TodoMstET;
 import com.pododoserver.todo.repository.TodoMstRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,12 +20,17 @@ public class TodoServiceImpl {
     public TodoMstET save(TodoMstET entity) {
         return todoMstRepository.save(entity);
     }
-    public List<TodoMstET> findAll() {
-        return todoMstRepository.findAll();
+
+    public List<TodoMstET> findByTodoStatus(TodoStatus todoStatus) {
+        return todoMstRepository.findByTodoStatusAndUseYn(todoStatus, UseYn.Y);
     }
 
-    public List<TodoMstET> findByDate(LocalDateTime startDate, LocalDateTime endDate) {
-        return todoMstRepository.findByStartDateGreaterThanEqualAndEndDateLessThanEqual(startDate, endDate);
+    public List<TodoMstET> findByDate(LocalDateTime startDate, LocalDateTime endDate, TodoStatus todoStatus) {
+        return todoMstRepository.findByStartDateGreaterThanEqualAndEndDateLessThanEqualAndTodoStatusAndUseYn(startDate, endDate, todoStatus, UseYn.Y);
+    }
+
+    public List<TodoMstET> findByUseYn(UseYn useYn) {
+        return todoMstRepository.findByUseYn(useYn);
     }
 
     public Optional<TodoMstET> findById(Long id) {

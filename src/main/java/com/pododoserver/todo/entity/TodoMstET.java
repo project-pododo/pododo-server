@@ -8,6 +8,7 @@ import com.pododoserver.todo.dto.TodoMstDto;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.Where;
 
 import java.time.LocalDateTime;
 
@@ -18,6 +19,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @DynamicUpdate
 @Entity
+@Where(clause = "delete_yn = 'N'")
 @Table(name = "todo_mst")
 public class TodoMstET extends BaseET {
 
@@ -25,8 +27,7 @@ public class TodoMstET extends BaseET {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long todoMstId;
 
-    // todo 지연로딩 옵션
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_mst_id")
     private AccountET accountET;
 
@@ -34,20 +35,20 @@ public class TodoMstET extends BaseET {
     @Column(name = "todo_status", length = 4, nullable = false)
     private TodoStatus todoStatus;
 
-    @Column( name = "todo_name", length = 1000)
+    @Column(name = "todo_name", length = 1000)
     private String todoName;
 
-    @Column( name = "todo_detail", length = 5000)
+    @Column(name = "todo_detail", length = 5000)
     private String todoDetail;
 
-    @Column( name = "start_date")
+    @Column(name = "start_date")
     private LocalDateTime startDate;
 
-    @Column( name = "end_date")
+    @Column(name = "end_date")
     private LocalDateTime endDate;
 
     @Enumerated(EnumType.STRING)
-    @Column( name = "use_yn", length = 1, nullable = false)
+    @Column(name = "use_yn", length = 1, nullable = false)
     private UseYn useYn;
 
     public TodoMstET updateAllInfo(TodoMstDto dto) {

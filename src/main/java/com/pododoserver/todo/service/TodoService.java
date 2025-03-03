@@ -35,14 +35,24 @@ public class TodoService {
                 .build());
     }
 
-    public List<TodoMstET> findTodoList(TodoSearchDto searchDto) {
+    public List<TodoMstET> findWaitTodoList() {
+        List<TodoMstET> todoMstETList = todoServiceImpl.findByTodoStatus(TodoStatus.WAIT);
+        return todoMstETList;
+    }
+
+    public List<TodoMstET> findCompletedTodoList(TodoSearchDto searchDto) {
         List<TodoMstET> todoMstETList;
 
         if (searchDto.isAllSearch()) {
-            todoMstETList = todoServiceImpl.findAll();
+            todoMstETList = todoServiceImpl.findByTodoStatus(TodoStatus.DONE);
         } else {
-            todoMstETList = todoServiceImpl.findByDate(searchDto.getStart(), searchDto.getEnd());
+            todoMstETList = todoServiceImpl.findByDate(searchDto.getStart(), searchDto.getEnd(), TodoStatus.DONE);
         }
+        return todoMstETList;
+    }
+
+    public List<TodoMstET> finRubbishTodoList() {
+        List<TodoMstET> todoMstETList = todoServiceImpl.findByUseYn(UseYn.N);
         return todoMstETList;
     }
 

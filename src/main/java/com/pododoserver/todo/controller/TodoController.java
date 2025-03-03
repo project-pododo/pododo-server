@@ -42,17 +42,32 @@ public class TodoController extends BaseController {
     }
 
     @GetMapping
-    public ResponseEntity<?> findTodoList(WebRequest webReq,
+    public ResponseEntity<?> findWaitTodoList(WebRequest webReq,
+                                          HttpSession session) {
+        return getResOK(webReq,
+                BaseMessage.SUCCESS_OK, TodoListResponse.of(todoService.findWaitTodoList()));
+    }
+
+    @GetMapping("/completed")
+    public ResponseEntity<?> findCompletedTodoList(WebRequest webReq,
                                           HttpSession session,
                                           @RequestParam(required = false, name="startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
                                           @RequestParam(required = false, name="endDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate) {
         return getResOK(webReq,
                 BaseMessage.SUCCESS_OK,
-                TodoListResponse.of(todoService.findTodoList(TodoSearchDto.builder()
+                TodoListResponse.of(todoService.findCompletedTodoList(TodoSearchDto.builder()
                         .startDate(startDate)
                         .endDate(endDate)
                         .build())));
     }
+
+    @GetMapping("/rubbish")
+    public ResponseEntity<?> finRubbishTodoList(WebRequest webReq,
+                                              HttpSession session) {
+        return getResOK(webReq,
+                BaseMessage.SUCCESS_OK, TodoListResponse.of(todoService.finRubbishTodoList()));
+    }
+
 
     @PostMapping
     public ResponseEntity<?> saveTodo(WebRequest webReq,
