@@ -1,34 +1,32 @@
 package com.pododoserver.common.util;
 
-import jakarta.annotation.PostConstruct;
-import org.jasypt.util.text.AES256TextEncryptor;
+import com.ulisesbocchio.jasyptspringboot.annotation.EnableEncryptableProperties;
+import org.jasypt.encryption.pbe.PooledPBEStringEncryptor;
+import org.jasypt.encryption.pbe.config.SimpleStringPBEConfig;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
-@Component
+@Configuration
+@EnableEncryptableProperties
 public class JasyptUtil {
 
-    @Value("${jasypt.encryptor.password}")
+    @Value("${JASYPT_ENCRYPTOR_PASSWORD}")
     private String encryptionKey;
 
-    private static final AES256TextEncryptor encryptor = new AES256TextEncryptor();
-
-    @PostConstruct
-    public void init() {
-        if (encryptionKey == null || encryptionKey.isEmpty()) {
-            throw new IllegalStateException("JASYPT_ENCRYPTOR_PASSWORD 환경 변수가 설정되지 않았습니다.");
-        }
-        encryptor.setPassword(encryptionKey);
-    }
-
-    // 암호화 메서드
-    public static String encrypt(String plainText) {
-        return encryptor.encrypt(plainText);
-    }
-
-    // 복호화 메서드
-    public static String decrypt(String encryptedText) {
-        return encryptor.decrypt(encryptedText);
+    @Bean(name = "jasyptStringEncryptor")
+    public PooledPBEStringEncryptor encryptor() {
+        PooledPBEStringEncryptor encryptor = new PooledPBEStringEncryptor();
+        SimpleStringPBEConfig config = new SimpleStringPBEConfig();
+        config.setPassword(encryptionKey);
+        config.setAlgorithm("PBEWithHMACSHA512AndAES_256");
+        config.setKeyObtentionIterations("1000");
+        config.setPoolSize("1");
+        config.setProviderName("SunJCE");
+        config.setSaltGeneratorClassName("org.jasypt.salt.RandomSaltGenerator");
+        config.setIvGeneratorClassName("org.jasypt.iv.RandomIvGenerator");
+        config.setStringOutputType("base64");
+        encryptor.setConfig(config);
+        return encryptor;
     }
 }
-

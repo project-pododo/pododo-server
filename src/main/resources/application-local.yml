@@ -1,9 +1,9 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ENC(mfwpY6Fe9k5efKMa6Hxg9lSjkbyCrEHmuAaQhR3hB9dXgYQNlkk6ycZQQu6IFykYLJogn36Uw6907DZqntPEDsE+AYBdaEww2RjNqbup1RaCXsGH7+EI0eZCbEGsy83F)
-    username: ENC(gq/ybhP706qRlh2nBaOdfsISNm4ckXLsjkiTP+ZWy3DjtBhpfy00R5i5SkfI5Pz7)
-    password: ENC(CZvoqUNMk4OS2nOV4G8c8cJfI/y0kd0ezlVLL4BYSzw4wONOnPlskSF/nGKWjAG0)
+    url: ENC(VpuY/k6gdZi9VP0HPK5IYHlv6uRwxUXAemgmjbsUuN461DYuKWoQZ1dMuRijwvyW2QFQzXvWVJBvm7P6TIlIdp+NxnblTnGe)
+    username: ENC(LO6NXf3iMZtCCw/eKkS7VQ==)
+    password: ENC(UhsrYPYyrAd7Kl/Eg29o48XRwbuYc8S2)
     data-source-properties:
       rewriteBatchedStatements: true
     hikari:
@@ -22,3 +22,9 @@ spring:
           batch_size: 100
           order_inserts: true
           order_updates: true
+
+jasypt:
+  encryptor:
+    password: ${JASYPT_ENCRYPTOR_PASSWORD}
+    iv-generator-classname: org.jasypt.iv.NoIvGenerator
+    algorithm: PBEWithMD5AndDES
