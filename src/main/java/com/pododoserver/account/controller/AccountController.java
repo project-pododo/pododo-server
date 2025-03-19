@@ -17,14 +17,4 @@ import org.springframework.web.context.request.WebRequest;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/account")
 public class AccountController extends BaseController {
-
-    private final AccountService accountService;
-
-    @GetMapping("/test")
-    public ResponseEntity<?> getAccount(HttpSession session,
-                                        WebRequest webReq) {
-
-        accountService.getAccountInfoById();
-        return getResOK(webReq, BaseMessage.SUCCESS_OK);
-    }
 }

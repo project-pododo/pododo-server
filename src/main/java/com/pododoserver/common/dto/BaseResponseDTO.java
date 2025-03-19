@@ -23,7 +23,7 @@ public class BaseResponseDTO<T> {
         this.message = response.get("message");
     }
 
-    public void setResponse(ErrorMessage errorMessage){
+    public void setResponseErrorMessage(ErrorMessage errorMessage){
         this.code = errorMessage.getCode();
         this.message = errorMessage.getMessage();
     }

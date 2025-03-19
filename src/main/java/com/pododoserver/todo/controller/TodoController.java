@@ -1,5 +1,6 @@
 package com.pododoserver.todo.controller;
 
+import com.pododoserver.common.dto.BaseResponseDTO;
 import com.pododoserver.todo.controller.request.TodoModifyInfoRequest;
 import com.pododoserver.todo.controller.request.TodoModifyStatusRequest;
 import com.pododoserver.todo.controller.response.TodoListResponse;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 
 import java.time.LocalDate;
+import java.util.List;
 
 
 @Slf4j
@@ -28,28 +30,15 @@ public class TodoController extends BaseController {
 
     private final TodoService todoService;
 
-    // todo swagger
-    @GetMapping("/test")
-    public ResponseEntity<?> getItemListBySeller(HttpSession session,
-                                                 WebRequest webReq) {
-        log.info("test");
-        return getResOK(webReq, BaseMessage.SUCCESS_OK, TestDTO.builder()
-                .id(0L)
-                .name("test")
-                .age(20)
-                .comment("테스트입니다-v1")
-                .build());
-    }
-
     @GetMapping
-    public ResponseEntity<?> findWaitTodoList(WebRequest webReq,
-                                          HttpSession session) {
+    public ResponseEntity<BaseResponseDTO<List<TodoListResponse>>> findWaitTodoList(WebRequest webReq,
+                                                                                    HttpSession session) {
         return getResOK(webReq,
                 BaseMessage.SUCCESS_OK, TodoListResponse.of(todoService.findWaitTodoList()));
     }
 
     @GetMapping("/completed")
-    public ResponseEntity<?> findCompletedTodoList(WebRequest webReq,
+    public ResponseEntity<BaseResponseDTO<List<TodoListResponse>>> findCompletedTodoList(WebRequest webReq,
                                           HttpSession session,
                                           @RequestParam(required = false, name="startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
                                           @RequestParam(required = false, name="endDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate) {
@@ -62,7 +51,7 @@ public class TodoController extends BaseController {
     }
 
     @GetMapping("/rubbish")
-    public ResponseEntity<?> finRubbishTodoList(WebRequest webReq,
+    public ResponseEntity<BaseResponseDTO<List<TodoListResponse>>> finRubbishTodoList(WebRequest webReq,
                                               HttpSession session) {
         return getResOK(webReq,
                 BaseMessage.SUCCESS_OK, TodoListResponse.of(todoService.finRubbishTodoList()));
@@ -70,7 +59,7 @@ public class TodoController extends BaseController {
 
 
     @PostMapping
-    public ResponseEntity<?> saveTodo(WebRequest webReq,
+    public ResponseEntity<BaseResponseDTO<Object>> saveTodo(WebRequest webReq,
                                   HttpSession session,
                                   @RequestBody TodoRegisterRequest request) {
         request.validate();
@@ -80,7 +69,7 @@ public class TodoController extends BaseController {
     }
 
     @PutMapping
-    public ResponseEntity<?> modifyTodo(WebRequest webRequest,
+    public ResponseEntity<BaseResponseDTO<Object>> modifyTodo(WebRequest webRequest,
                                        HttpSession session,
                                        @RequestBody TodoModifyInfoRequest request) {
         request.validate();
@@ -90,7 +79,7 @@ public class TodoController extends BaseController {
     }
 
     @PatchMapping("/status")
-    public ResponseEntity<?> modifyStatus(WebRequest webRequest,
+    public ResponseEntity<BaseResponseDTO<Object>> modifyStatus(WebRequest webRequest,
                                         HttpSession session,
                                         @RequestBody TodoModifyStatusRequest request) {
         request.validate();
@@ -100,7 +89,7 @@ public class TodoController extends BaseController {
     }
 
     @DeleteMapping
-    public ResponseEntity<?> modifyUseYn(WebRequest webRequest,
+    public ResponseEntity<BaseResponseDTO<Object>> modifyUseYn(WebRequest webRequest,
                                           HttpSession session,
                                           @RequestBody TodoModifyStatusRequest request) {
         request.validate();
@@ -110,7 +99,7 @@ public class TodoController extends BaseController {
     }
 
     @PatchMapping("/use")
-    public ResponseEntity<?> restoreUseYn(WebRequest webRequest,
+    public ResponseEntity<BaseResponseDTO<Object>> restoreUseYn(WebRequest webRequest,
                                          HttpSession session,
                                          @RequestBody TodoModifyStatusRequest request) {
         request.validate();
