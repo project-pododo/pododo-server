@@ -1,5 +1,6 @@
 package com.pododoserver.todo.controller;
 
+import com.pododoserver.common.dto.BaseResponseDTO;
 import com.pododoserver.todo.controller.request.TodoModifyInfoRequest;
 import com.pododoserver.todo.controller.request.TodoModifyStatusRequest;
 import com.pododoserver.todo.controller.response.TodoListResponse;
@@ -9,6 +10,7 @@ import com.pododoserver.common.BaseController;
 import com.pododoserver.todo.dto.TestDTO;
 import com.pododoserver.todo.dto.TodoSearchDto;
 import com.pododoserver.todo.service.TodoService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 
 import java.time.LocalDate;
+import java.util.List;
 
 
 @Slf4j
@@ -28,28 +31,17 @@ public class TodoController extends BaseController {
 
     private final TodoService todoService;
 
-    // todo swagger
-    @GetMapping("/test")
-    public ResponseEntity<?> getItemListBySeller(HttpSession session,
-                                                 WebRequest webReq) {
-        log.info("test");
-        return getResOK(webReq, BaseMessage.SUCCESS_OK, TestDTO.builder()
-                .id(0L)
-                .name("test")
-                .age(20)
-                .comment("테스트입니다-v1")
-                .build());
-    }
-
+    @Operation(summary = "할일 조회 - 대기")
     @GetMapping
-    public ResponseEntity<?> findWaitTodoList(WebRequest webReq,
-                                          HttpSession session) {
+    public ResponseEntity<BaseResponseDTO<List<TodoListResponse>>> findWaitTodoList(WebRequest webReq,
+                                                                                    HttpSession session) {
         return getResOK(webReq,
                 BaseMessage.SUCCESS_OK, TodoListResponse.of(todoService.findWaitTodoList()));
     }
 
+    @Operation(summary = "할일 조회 - 완료")
     @GetMapping("/completed")
-    public ResponseEntity<?> findCompletedTodoList(WebRequest webReq,
+    public ResponseEntity<BaseResponseDTO<List<TodoListResponse>>> findCompletedTodoList(WebRequest webReq,
                                           HttpSession session,
                                           @RequestParam(required = false, name="startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
                                           @RequestParam(required = false, name="endDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate) {
@@ -61,16 +53,17 @@ public class TodoController extends BaseController {
                         .build())));
     }
 
+    @Operation(summary = "휴지통 조회")
     @GetMapping("/rubbish")
-    public ResponseEntity<?> finRubbishTodoList(WebRequest webReq,
+    public ResponseEntity<BaseResponseDTO<List<TodoListResponse>>> finRubbishTodoList(WebRequest webReq,
                                               HttpSession session) {
         return getResOK(webReq,
                 BaseMessage.SUCCESS_OK, TodoListResponse.of(todoService.finRubbishTodoList()));
     }
 
-
+    @Operation(summary = "할일 등록")
     @PostMapping
-    public ResponseEntity<?> saveTodo(WebRequest webReq,
+    public ResponseEntity<BaseResponseDTO<Object>> saveTodo(WebRequest webReq,
                                   HttpSession session,
                                   @RequestBody TodoRegisterRequest request) {
         request.validate();
@@ -79,8 +72,9 @@ public class TodoController extends BaseController {
         return getResOK(webReq, BaseMessage.SUCCESS_REGISTER);
     }
 
+    @Operation(summary = "할일 수정")
     @PutMapping
-    public ResponseEntity<?> modifyTodo(WebRequest webRequest,
+    public ResponseEntity<BaseResponseDTO<Object>> modifyTodo(WebRequest webRequest,
                                        HttpSession session,
                                        @RequestBody TodoModifyInfoRequest request) {
         request.validate();
@@ -89,8 +83,9 @@ public class TodoController extends BaseController {
         return getResOK(webRequest, BaseMessage.SUCCESS_MODIFY);
     }
 
+    @Operation(summary = "할일 상태 변경")
     @PatchMapping("/status")
-    public ResponseEntity<?> modifyStatus(WebRequest webRequest,
+    public ResponseEntity<BaseResponseDTO<Object>> modifyStatus(WebRequest webRequest,
                                         HttpSession session,
                                         @RequestBody TodoModifyStatusRequest request) {
         request.validate();
@@ -99,8 +94,9 @@ public class TodoController extends BaseController {
         return getResOK(webRequest, BaseMessage.SUCCESS_MODIFY);
     }
 
+    @Operation(summary = "할일 삭제 - 휴지통")
     @DeleteMapping
-    public ResponseEntity<?> modifyUseYn(WebRequest webRequest,
+    public ResponseEntity<BaseResponseDTO<Object>> modifyUseYn(WebRequest webRequest,
                                           HttpSession session,
                                           @RequestBody TodoModifyStatusRequest request) {
         request.validate();
@@ -109,8 +105,9 @@ public class TodoController extends BaseController {
         return getResOK(webRequest, BaseMessage.SUCCESS_DELETE);
     }
 
+    @Operation(summary = "할일 복구")
     @PatchMapping("/use")
-    public ResponseEntity<?> restoreUseYn(WebRequest webRequest,
+    public ResponseEntity<BaseResponseDTO<Object>> restoreUseYn(WebRequest webRequest,
                                          HttpSession session,
                                          @RequestBody TodoModifyStatusRequest request) {
         request.validate();
