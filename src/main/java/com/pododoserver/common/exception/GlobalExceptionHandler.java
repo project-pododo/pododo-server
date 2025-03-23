@@ -20,21 +20,21 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<BaseResponseDTO<Void>> handleIllegalArgumentException(IllegalArgumentException e) {
         BaseResponseDTO errorRes = new BaseResponseDTO<>();
-        errorRes.setResponse(ErrorMessage.INVALID_REQUEST);
+        errorRes.setResponseErrorMessage(ErrorMessage.INVALID_REQUEST);
         return getResponse(e, errorRes);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<BaseResponseDTO<?>> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         BaseResponseDTO errorRes = new BaseResponseDTO<>();
-        errorRes.setResponse(ErrorMessage.INVALID_REQUEST);
+        errorRes.setResponseErrorMessage(ErrorMessage.INVALID_REQUEST);
         return getResponse(e, errorRes);
     }
 
     @ExceptionHandler(BaseException.class)
     public ResponseEntity<BaseResponseDTO<?>> handleBaseException(BaseException e) {
         BaseResponseDTO errorRes = new BaseResponseDTO<>();
-        errorRes.setResponse(ErrorMessage.getBaseMsg(e.getCodeId()));
+        errorRes.setResponseErrorMessage(ErrorMessage.getBaseMsg(e.getCodeId()));
         return getResponse(e, errorRes);
     }
 
@@ -49,7 +49,7 @@ public class GlobalExceptionHandler {
                     .map(JsonMappingException.Reference::getFieldName)
                     .ifPresent(fieldName -> errorRes.setResponse(ResMessageUtil.getMessage(ErrorMessage.INVALID_REQUEST_PARAM, fieldName.lines().toArray())));
         } else {
-            errorRes.setResponse(ErrorMessage.INVALID_REQUEST);
+            errorRes.setResponseErrorMessage(ErrorMessage.INVALID_REQUEST);
         }
 
         return getResponse(e, errorRes);
